@@ -35,14 +35,11 @@ def data_hist(X, X_hist):
     for i in X:
         # 读取图像
         image = cv2.imread(i)
-
         # 图像像素大小一致
         img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
         # 计算图像直方图并存储至X数组
-        hist = cv2.calcHist([img], [0, 1, 2], None,
-                            [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
-
-        X_hist.append(((hist / 255).flatten()))
+        hist = cv2.calcHist([img], [0, 1, 2], None, [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
+        X_hist.append(((hist / 255).flatten())) #利用.flatten函数返回一维数组
 
 #计算单个图像的颜色直方图
 def data_hist1(X):
@@ -51,8 +48,7 @@ def data_hist1(X):
         # 图像像素大小一致
         img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
         # 计算颜色直方图
-        hist = cv2.calcHist([img], [0, 1, 2], None,
-                            [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
+        hist = cv2.calcHist([img], [0, 1, 2], None, [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
         return (((hist / 255).flatten()))
 
 #计算HSV直方图
