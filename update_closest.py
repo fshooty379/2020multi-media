@@ -5,7 +5,7 @@ from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import pickle
-
+from fnmatch import fnmatch, fnmatchcase
 
 #读取训练集
 def read_train(X, Y, classifications):
@@ -108,23 +108,23 @@ if __name__ == '__main__':
             pickle.dump(model, f)
     predictions_labels = model.predict(X_test_hist)  # 保存预测结果
     # 输出算法评价指标
-    print('准确率accuracy：{:.4f}'.format(metrics.accuracy_score(y_test, predictions_labels), '.4f'))
-    print('查准率Precision：{:.4f}'.format(metrics.precision_score(y_test, predictions_labels, average='macro'), '.4f'))
-    print('查全率reall：{:.4f}'.format(metrics.recall_score(y_test, predictions_labels, average='macro'), '.4f'))
+    print('准确率accuracy：{:.4f}'.format(metrics.accuracy_score(y_test, predictions_labels)))
+    print('查准率Precision：{:.4f}'.format(metrics.precision_score(y_test, predictions_labels, average='macro')))
+    print('查全率reall：{:.4f}'.format(metrics.recall_score(y_test, predictions_labels, average='macro')))
     print(classification_report(y_test, predictions_labels))
 
     # ******************************************************************
     # 第二步 利用分类器找到某幅图片的分类，在该分类下的所有图片中寻找与之最接近的五幅图片
     # ******************************************************************
 
-    number = 2372   # 该副图片img的编号，从0~2999
+    number = 2035   # 该副图片img的编号，从0~2999
     src_img = X_test[number]    # img的名称/路径
     # 找出源图片的真实分类
     for i in classifications:
         if i in src_img:
             src_label = i
     print('图片{}的预测分类是:'.format(src_img)+str(predictions_labels[number])+'；真实分类是:'+str(src_label))
-    # 找到与img同一分类下的所有图片
+    # 找到与img真实分类同一分类下的所有图片
     families = []
     for i in range(0, len(X_test)):
         if predictions_labels[i] == src_label:
