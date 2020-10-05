@@ -99,7 +99,8 @@ if __name__ == '__main__':
         with open("model.pkl", "rb") as f:  # 若模型已经存在，加载已保存的模型
             model = pickle.load(f)
     except Exception:   # 若模型不存在，重新训练
-        model = RandomForestClassifier(n_jobs=-1, n_estimators=350, max_depth=11, oob_score=1, random_state=1).fit(X_train_hist, y_train)
+        model = RandomForestClassifier(n_jobs=-1, n_estimators=350, max_depth=11, 
+                                       oob_score=1, random_state=1).fit(X_train_hist, y_train)
         with open("model.pkl", "wb") as f:  # 保存模型
             pickle.dump(model, f)
     predictions_labels = model.predict(X_test_hist)  # 保存预测结果
