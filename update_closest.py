@@ -35,14 +35,11 @@ def data_hist(X, X_hist):
     for i in X:
         # 读取图像
         image = cv2.imread(i)
-
         # 图像像素大小一致
         img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
         # 计算图像直方图并存储至X数组
-        hist = cv2.calcHist([img], [0, 1, 2], None,
-                            [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
-
-        X_hist.append(((hist / 255).flatten()))
+        hist = cv2.calcHist([img], [0, 1, 2], None, [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
+        X_hist.append(((hist / 255).flatten())) #利用.flatten函数返回一维数组
 
 #计算单个图像的颜色直方图
 def data_hist1(X):
@@ -51,8 +48,7 @@ def data_hist1(X):
         # 图像像素大小一致
         img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
         # 计算颜色直方图
-        hist = cv2.calcHist([img], [0, 1, 2], None,
-                            [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
+        hist = cv2.calcHist([img], [0, 1, 2], None, [8, 8, 8], [0.0, 255.0, 0.0, 255.0, 0.0, 255.0])
         return (((hist / 255).flatten()))
 
 #计算HSV直方图
@@ -103,7 +99,8 @@ if __name__ == '__main__':
         with open("model.pkl", "rb") as f:  # 若模型已经存在，加载已保存的模型
             model = pickle.load(f)
     except Exception:   # 若模型不存在，重新训练
-        model = RandomForestClassifier(n_jobs=-1, n_estimators=350, max_depth=11, oob_score=1, random_state=1).fit(X_train_hist, y_train)
+        model = RandomForestClassifier(n_jobs=-1, n_estimators=350, max_depth=11, 
+                                       oob_score=1, random_state=1).fit(X_train_hist, y_train)
         with open("model.pkl", "wb") as f:  # 保存模型
             pickle.dump(model, f)
     predictions_labels = model.predict(X_test_hist)  # 保存预测结果
